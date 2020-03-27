@@ -1,4 +1,8 @@
 // It is object used to store information related to Game :
+//Car object store information like Speed of car ,Postion of car from top,Postion of car from left : 
+// X :store Left position of car : 
+//Y :store Top position of car:
+ 
 let  Game  = {      
 Car:{Speed:5,X:0,Y:0},
 Arrows:{ArrowLeft:false,ArrowRight:false,ArrowUp:false,ArrowDown:false},
@@ -78,6 +82,21 @@ let Play = () => {
   window.requestAnimationFrame(Play);   
 }
 
+let createLine = (Position) => {
+   
+   for(i = 0 ; i < 9 ; i++){ 
+        
+    let line = document.createElement('div');
+    line.setAttribute('class','lines');
+    console.log(Position);
+    line.style.left = `${220}px`;
+    line.style.top = `${i*74}px`;
+    Position.appendChild(line);
+
+   }
+     
+}
+
 // It is Start Function :
 let START = (Element) =>{
 
@@ -87,7 +106,7 @@ let START = (Element) =>{
     
    createCar(document.querySelector('#road'));
    
-  
+   createLine(document.querySelector('#road'));
    window.requestAnimationFrame(Play);
  
 }
