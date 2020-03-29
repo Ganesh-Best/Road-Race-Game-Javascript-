@@ -69,13 +69,13 @@ body{
 }
 .car , .cars{
    width: 50px;
-   height:80px;
+   height:60px;
    background-color:black;
    position: absolute;
    z-index:2; 
 }
 .cars{
-    height:70px;
+    height:50px;
 }
 .lines{
     position: absolute;
@@ -100,4 +100,8 @@ body{
   padding:20px;
   border:8px solid white;
   box-shadow:5px 5px  20px black;
+}
+img{
+   width:100%;
+   height:100%; 
 }

@@ -22,7 +22,7 @@ console.log("Reset game :");
 let printMessage = (position,start) => {
  
 
-   position.innerHTML = `<h1> Game over :${Game.Score}</h1>` ;
+   position.innerHTML = `<h1> Game over : ${Game.Score}</h1>` ;
    position.style.width = "355px";
    position.style.fontSize = "24px";
    position.classList.remove('hide');
@@ -107,7 +107,7 @@ let createEnemyCar = (Position) => {
        let enemyCar  = document.createElement('div');
        enemyCar.setAttribute('class','cars');
        enemyCar.style.left = `${randomleft() + 80 }px`; 
-       enemyCar.style.top  = `${i * 340 }px`;
+       enemyCar.style.top  = `${i * 150 }px`;
        enemyCar.style.backgroundColor = "blue" ;
        Position.appendChild(enemyCar);
    
