@@ -6,8 +6,32 @@
 let  Game  = {      
 Car:{Speed:5,X:0,Y:0},
 Play:true,
+Score:0,
 Arrows:{ArrowLeft:false,ArrowRight:false,ArrowUp:false,ArrowDown:false},
 }
+
+let resetGame = (Game ,road) => {
+  
+   Game.Score = 0 ;
+   
+   Game.Play = true;
+   
+  road.innerHTML = " ";
+console.log("Reset game :");
+}
+let printMessage = (position,start) => {
+ 
+
+   position.innerHTML = `<h1> Game over :${Game.Score}</h1>` ;
+   position.style.width = "355px";
+   position.style.fontSize = "24px";
+   position.classList.remove('hide');
+
+
+   start.classList.remove('hide');
+
+}
+
 
 // It is down function: 
 let Down = (Element) =>{
@@ -51,16 +75,18 @@ let moveEnemyCar = (playerCar) => {
        let TOP  =  car.offsetTop ;
         
        if(TOP > 560)
-         TOP -= 600;
+         TOP -= 630 ;
        
        TOP += Game.Car.Speed ;
 
 
       car.style.top = `${TOP}px`;
     
-      if(isCarCollide(car,playerCar))
+      if(isCarCollide(car,playerCar)){
         Game.Play = false;
-
+        printMessage(document.querySelector('.message'),document.querySelector('.start'));
+        
+      }
       });
 
    
@@ -69,7 +95,7 @@ let moveEnemyCar = (playerCar) => {
 
 let randomleft = () =>{
    
- return  Math.floor(Math.random() * 400 ) ;   
+ return  Math.floor(Math.random() * 320 ) ;   
 
 }
 
@@ -80,8 +106,8 @@ let createEnemyCar = (Position) => {
 
        let enemyCar  = document.createElement('div');
        enemyCar.setAttribute('class','cars');
-       enemyCar.style.left = `${randomleft()}px`; 
-       enemyCar.style.top  = `${i * 200 }px`;
+       enemyCar.style.left = `${randomleft() + 80 }px`; 
+       enemyCar.style.top  = `${i * 340 }px`;
        enemyCar.style.backgroundColor = "blue" ;
        Position.appendChild(enemyCar);
    
@@ -136,15 +162,44 @@ let createCar = (position) => {
      console.log(Game.Car);
 }
 
+let moveLines = () => {
+     
+    let lines =  document.querySelectorAll('.lines');
+
+    lines.forEach(function(line,index,lines){
+        
+    let TOP =  line.offsetTop ;
+     
+     if(TOP > 600 )
+       TOP -= 660 ;
+     
+     TOP += Game.Car.Speed ;
+    
+     line.style.top = `${TOP}px` ;
+
+    });
+
+}
+
+let updateScore = () => {
+  
+    document.querySelector('.score').textContent = `Score : ${Game.Score - 1 }`;
+}
+
+
 let Play = () => {
 
    if(Game.Play){
 
        carMove(document.querySelector('#car'),Game.Arrows);
+       moveLines();
        moveEnemyCar(document.querySelector('#car'));
+       Game.Score++ ;
+       updateScore();
        window.requestAnimationFrame(Play);   
-   
+       
    }
+ 
 }
 
 let createLine = (Position) => {
@@ -165,14 +220,21 @@ let createLine = (Position) => {
 // It is Start Function :
 let START = (Element) => {
 
+
+   resetGame(Game,document.querySelector('#road'));
+
   document.querySelector('#start').classList.add('hide'); // It will hide start message from screen :
 
   document.querySelector('#message').classList.add('hide');// It will hide message from screen :
     
   createCar(document.querySelector('#road'));
    
-  //createLine(document.querySelector('#road'));
+  createLine(document.querySelector('#road'));
+  
   createEnemyCar(document.querySelector('#road'));
+
+  document.querySelector('.score').classList.remove('hide');
+
   window.requestAnimationFrame(Play);
  
 }
@@ -186,3 +248,4 @@ document.addEventListener('keydown',Down);
 
 // It is Event Handling on keys,when user release  key after press, Up function will Run(Execute):
 document.addEventListener('keyup',Up);
+
