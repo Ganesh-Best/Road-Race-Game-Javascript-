@@ -1,10 +1,11 @@
-// It is object used to store information related to Game :
+//It is object used to store information related to Game :
 //Car object store information like Speed of car ,Postion of car from top,Postion of car from left : 
-// X :store Left position of car : 
+//X :store Left position of car : 
 //Y :store Top position of car:
  
 let  Game  = {      
 Car:{Speed:5,X:0,Y:0},
+Play:true,
 Arrows:{ArrowLeft:false,ArrowRight:false,ArrowUp:false,ArrowDown:false},
 }
 
@@ -30,30 +31,88 @@ let Up = (Element) => {
 
 // It is move function :(Responsible to move car effectively in Game :)
 
+let isCarCollide = (enemyCar,car) => {
+  let aRect  = enemyCar.getBoundingClientRect();
+  let bRect =  car.getBoundingClientRect();
+   
+    if( ( ( (aRect.top + aRect.height ) < ( bRect.top ) ) || ( aRect.top > ( bRect.top + bRect.height ) ) || ( ( aRect.left + aRect.width ) < bRect.left ) || ( aRect.left > (bRect.left + bRect.width)) ))
+      return false;
+    else
+      return true;
+}
+
+let moveEnemyCar = (playerCar) => {
+   
+   
+     let enemyCars  =  document.querySelectorAll('.cars');
+
+      enemyCars.forEach(function(car,index,enemyCars){
+        
+       let TOP  =  car.offsetTop ;
+        
+       if(TOP > 560)
+         TOP -= 600;
+       
+       TOP += Game.Car.Speed ;
+
+
+      car.style.top = `${TOP}px`;
+    
+      if(isCarCollide(car,playerCar))
+        Game.Play = false;
+
+      });
+
+   
+   
+}
+
+let randomleft = () =>{
+   
+ return  Math.floor(Math.random() * 400 ) ;   
+
+}
+
+let createEnemyCar = (Position) => {
+   
+    
+   for(let i = 0 ; i < 4 ; i++){
+
+       let enemyCar  = document.createElement('div');
+       enemyCar.setAttribute('class','cars');
+       enemyCar.style.left = `${randomleft()}px`; 
+       enemyCar.style.top  = `${i * 200 }px`;
+       enemyCar.style.backgroundColor = "blue" ;
+       Position.appendChild(enemyCar);
+   
+   }
+}
+
+
 let carMove = (car, Arrowkeys) =>{
 
    // this if conditon check if ArrowUp key activate(true) or not 
    // if it is activate then it will decrease Top position of car by car Speed(5):  
-   if(Arrowkeys.ArrowUp){
+   if(Arrowkeys.ArrowUp && Game.Car.Y > 100){
       Game.Car.Y -=  Game.Car.Speed ;  
    }
   
   // this if conditon check if ArrowDown key activate(true) or not 
   // if it is activate then it will increase Top position of car by car Speed(5):    
-    if(Arrowkeys.ArrowDown){
+    if(Arrowkeys.ArrowDown && Game.Car.Y  < 450){
       Game.Car.Y += Game.Car.Speed ;  
     }
 
   // this if conditon check if ArrowLeft key activate(true) or not 
    // if it is activate then it will decrease left position of car by car Speed(5):  
      
-  if(Arrowkeys.ArrowLeft){
+  if(Arrowkeys.ArrowLeft && Game.Car.X > 0){
      Game.Car.X -= Game.Car.Speed ;  
   }
 
   // this if conditon check if ArrowRight key activate(true) or not 
    // if it is activate then it will increase left position of car by car Speed(5):   
-  if(Arrowkeys.ArrowRight){
+  if(Arrowkeys.ArrowRight && Game.Car.X < 400){
      Game.Car.X += Game.Car.Speed ;  
   }   
   
@@ -76,10 +135,16 @@ let createCar = (position) => {
      Game.Car.Y = carDiv.offsetTop ;  
      console.log(Game.Car);
 }
+
 let Play = () => {
 
-  carMove(document.querySelector('#car'),Game.Arrows);
-  window.requestAnimationFrame(Play);   
+   if(Game.Play){
+
+       carMove(document.querySelector('#car'),Game.Arrows);
+       moveEnemyCar(document.querySelector('#car'));
+       window.requestAnimationFrame(Play);   
+   
+   }
 }
 
 let createLine = (Position) => {
@@ -98,16 +163,17 @@ let createLine = (Position) => {
 }
 
 // It is Start Function :
-let START = (Element) =>{
+let START = (Element) => {
 
   document.querySelector('#start').classList.add('hide'); // It will hide start message from screen :
 
   document.querySelector('#message').classList.add('hide');// It will hide message from screen :
     
-   createCar(document.querySelector('#road'));
+  createCar(document.querySelector('#road'));
    
-   createLine(document.querySelector('#road'));
-   window.requestAnimationFrame(Play);
+  //createLine(document.querySelector('#road'));
+  createEnemyCar(document.querySelector('#road'));
+  window.requestAnimationFrame(Play);
  
 }
 

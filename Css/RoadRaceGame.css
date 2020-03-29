@@ -61,11 +61,15 @@ body{
   border-right:9px dashed white;  
 
 }
-.car{
+.car , .cars{
    width: 50px;
    height:80px;
    background-color:black;
-   position: absolute; 
+   position: absolute;
+   z-index:2; 
+}
+.cars{
+    height:70px;
 }
 .lines{
     position: absolute;
