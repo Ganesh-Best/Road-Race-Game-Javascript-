@@ -2,7 +2,10 @@
 //Car object store information like Speed of car ,Postion of car from top,Postion of car from left : 
 //X :store Left position of car : 
 //Y :store Top position of car:
- 
+//Play :It  means Game is active .
+//Score:It is used to store Score of player : 
+
+// It is Game Object :
 let  Game  = {      
 Car:{Speed:5,X:0,Y:0},
 Play:true,
@@ -10,25 +13,45 @@ Score:0,
 Arrows:{ArrowLeft:false,ArrowRight:false,ArrowUp:false,ArrowDown:false},
 }
 
+//It is reset Game function,it receiving 2 parameter ,first one Game Object,2nd road object(It means div element having id or class value : road) :
 let resetGame = (Game ,road) => {
-  
+
+  // It initalize score = 0;
    Game.Score = 0 ;
    
+   //It make game active again : 
    Game.Play = true;
    
+  // It reset road object (It means div element having class or id  road) to empty :    
   road.innerHTML = " ";
-console.log("Reset game :");
-}
-let printMessage = (position,start) => {
- 
 
+}
+
+
+// It is printMessage function :
+//It receiving 3 parameter:
+//1st one mesage object(It means a Div element having class or id value : message ),
+//2nd one is Start Object(It means a Div element having class or id value : start ) 
+//3rd one is Score Object (It means a Div element having class or id value : score ) 
+let printMessage = (position,start,score) => {
+ 
+  // It  changes inner Html 
    position.innerHTML = `<h1> Game over : ${Game.Score}</h1>` ;
-   position.style.width = "355px";
+  
+  //It changes width:
+   position.style.width = "405px";
+
+  //It changes font size :
    position.style.fontSize = "24px";
+
+  //It remove class name hide: 
    position.classList.remove('hide');
 
-
+  //It remove class name hide:  
    start.classList.remove('hide');
+
+  //It add class hide : 
+   score.classList.add('hide');
 
 }
 
@@ -55,61 +78,104 @@ let Up = (Element) => {
 
 // It is move function :(Responsible to move car effectively in Game :)
 
+
+//It is car Collide function ,receiving 2 parameter:
+//1st one is enemy Car ,
+//2nd one is user Car:
+//It will check whether two element collide or not,
+//If two element collides it return true ,otherwise return false :
+
 let isCarCollide = (enemyCar,car) => {
+
+  // It will return all coordinate of enemycar object such as top,left,right,bottom,widht,height: 
   let aRect  = enemyCar.getBoundingClientRect();
+
+  
+  // It will return all coordinate of car object such as top,left,right,bottom,widht,height:
   let bRect =  car.getBoundingClientRect();
    
+
+  
     if( ( ( (aRect.top + aRect.height ) < ( bRect.top ) ) || ( aRect.top > ( bRect.top + bRect.height ) ) || ( ( aRect.left + aRect.width ) < bRect.left ) || ( aRect.left > (bRect.left + bRect.width)) ))
       return false;
     else
       return true;
 }
 
+// It is moveEnemyCar function :It is resposible for movements of enemy Cars :
 let moveEnemyCar = (playerCar) => {
    
-   
+    // It will select all cars(div elements having class values cars) & return as Array of objects of car :    
      let enemyCars  =  document.querySelectorAll('.cars');
 
+    // It will apply forEach function (It acts like loop) to  enemyCars array :
       enemyCars.forEach(function(car,index,enemyCars){
         
+       // offsetTop return top position of element(Object) & store in TOP : 
        let TOP  =  car.offsetTop ;
-        
+       
+       // It check if top > 560 ,then it subtract 630 in TOP 
        if(TOP > 560)
          TOP -= 630 ;
        
+      //It increases TOP value by Game.car.speed value(5); 
        TOP += Game.Car.Speed ;
 
-
+     //It sets top positon of car :
       car.style.top = `${TOP}px`;
     
+    // It check whether car collide with enemycar or not ::
+    //If collide it return true :
+    //if blocks will execute when carCollide function return true :  
       if(isCarCollide(car,playerCar)){
+      
+        // It   deactivates the game :
         Game.Play = false;
-        printMessage(document.querySelector('.message'),document.querySelector('.start'));
+
+       //printMessage will call ,having 3 object arguments 
+       // 1st is message object:
+       //2nd one is start object:
+       //3rd one is score object : 
+        printMessage(document.querySelector('.message'),document.querySelector('.start'),document.querySelector('.score'));
         
       }
-      });
+
+      }); // closing braces forEach function :
 
    
    
 }
 
+// It is randomleft function  return random number between 0 to 320 :
 let randomleft = () =>{
    
  return  Math.floor(Math.random() * 320 ) ;   
 
 }
 
+// It is createEnemyCar function : It  generates enemy cars in games ,It receiving road Object(div element having class or id value : road):
 let createEnemyCar = (Position) => {
    
-    
+   // It is loop ,it executes all code 4 times : 
    for(let i = 0 ; i < 4 ; i++){
+      
+        // It create a div element object in DOM(Document Object Modal) & store to enemyCar variable : 
+             let enemyCar  = document.createElement('div');
+    
+        // It  sets a attribute to enemyCar object :
+             enemyCar.setAttribute('class','cars');
+    
+        //It  sets left position of enemyCar object: 
+             enemyCar.style.left = `${randomleft() + 80 }px`;
+        
+        //It  sets top position of enemyCar object: 
+             enemyCar.style.top  = `${i * 150 }px`;
 
-       let enemyCar  = document.createElement('div');
-       enemyCar.setAttribute('class','cars');
-       enemyCar.style.left = `${randomleft() + 80 }px`; 
-       enemyCar.style.top  = `${i * 150 }px`;
-       enemyCar.style.backgroundColor = "blue" ;
-       Position.appendChild(enemyCar);
+        //It  sets backgroundColor of enemyCar object: 
+             enemyCar.style.backgroundColor = "blue" ;
+        
+        // It add enemyCar object to road object(Div element having class or id value :road):      
+             Position.appendChild(enemyCar);
    
    }
 }
