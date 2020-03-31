@@ -9,8 +9,9 @@
 let  Game  = {      
 Car:{Speed:5,X:0,Y:0},
 Play:true,
+Stop:false,
 Score:0,
-Arrows:{ArrowLeft:false,ArrowRight:false,ArrowUp:false,ArrowDown:false},
+Keys:{ArrowLeft:false,ArrowRight:false,ArrowUp:false,ArrowDown:false,Space:{Toggle:true}},
 }
 
 //It is reset Game function,it receiving 2 parameter ,first one Game Object,2nd road object(It means div element having id or class value : road) :
@@ -59,11 +60,51 @@ let printMessage = (position,start,score) => {
 // It is down function: 
 let Down = (Element) =>{
    
-     // This if condition check whether press keys are  ArrowKeys or Not:
+     // This If-condition will check whether press keys are  ArrowKeys or Not:
      //if press keys are arrow keys then it will make  corresponding arrowkey true(activate) inside inside Arrows object[Game.Arrows] :   
     if(Element.key === "ArrowLeft" || Element.key === "ArrowRight" || Element.key === "ArrowUp" || Element.key === "ArrowDown") 
-      Game.Arrows[Element.key] = true;
- 
+      Game.Keys[Element.key] = true;
+   
+// This If condition will check whether press keys is space key or not :
+//if Press keys is space key then it will  select message object & make it appear of screen with  message :        
+  
+if(Element.key === " " && Game.Keys.Space.Toggle){
+        //It will select message Object & store reference in messageBox :
+     let messageBox = document.querySelector('.message');
+       
+       //It will change message Object inner HTML :
+         messageBox.innerHTML = `<h1>Press Space for Resume</h1>` ;
+      
+       //It will remove hide class from Message object :    
+         messageBox.classList.remove('hide');
+
+       // It will  deactivate Play : 
+         Game.Play = false ;
+
+       // It deactivate Toggle : 
+         Game.Keys.Space.Toggle = false ; 
+
+}else if( Element.key === " " && !Game.Keys.Space.Toggle ){
+         
+      // It will select message Object & store in messageBox 
+     let messageBox = document.querySelector('.message');
+
+     //It will add hide class to message object :
+         messageBox.classList.add('hide');
+     
+    //It will activate game :    
+         Game.Play = true ;
+
+    //It will activate toggle :     
+         Game.Keys.Space.Toggle = true ;
+    
+    //It will call Play function again :     
+         Play();
+
+}
+
+
+
 }
 //It is Up function :
 let Up = (Element) => {
@@ -72,9 +113,13 @@ let Up = (Element) => {
      // This if condition check whether press keys are  ArrowKeys or Not:
      //if press keys are arrow keys then it will make  corresponding arrowkey false(deactivate) inside inside Arrows object[Game.Arrows] :
      if(Element.key === "ArrowLeft" || Element.key === "ArrowRight" || Element.key === "ArrowUp" || Element.key === "ArrowDown") 
-      Game.Arrows[Element.key] = false;
-  
-}
+      Game.Keys[Element.key] = false;
+
+       
+     // This If conditon will check whether press keys is space key or not :
+     //if Press keys is space key then it will make space key false inside Arrows object[Game.Keys] :      
+      
+}     
 
 // It is move function :(Responsible to move car effectively in Game :)
 
@@ -95,7 +140,7 @@ let isCarCollide = (enemyCar,car) => {
   let bRect =  car.getBoundingClientRect();
    
 
-  
+  // It will detect collision : ->You have to search collision in and you will understand it :
     if( ( ( (aRect.top + aRect.height ) < ( bRect.top ) ) || ( aRect.top > ( bRect.top + bRect.height ) ) || ( ( aRect.left + aRect.width ) < bRect.left ) || ( aRect.left > (bRect.left + bRect.width)) ))
       return false;
     else
@@ -252,16 +297,22 @@ let updateScore = () => {
     document.querySelector('.score').textContent = `Score : ${Game.Score - 1 }`;
 }
 
+let faster = (Game) => {
+  
+}
 
 let Play = () => {
 
    if(Game.Play){
-
-       carMove(document.querySelector('#car'),Game.Arrows);
+        
+        
+       carMove(document.querySelector('#car'),Game.Keys);
+       spaceStop(Game.Keys);
        moveLines();
        moveEnemyCar(document.querySelector('#car'));
        Game.Score++ ;
        updateScore();
+       faster(Game); 
        window.requestAnimationFrame(Play);   
        
    }
@@ -283,6 +334,11 @@ let createLine = (Position) => {
      
 }
 
+let spaceStop = (Element) => {
+   
+  
+}
+
 // It is Start Function :
 let START = (Element) => {
 
@@ -300,7 +356,8 @@ let START = (Element) => {
   createEnemyCar(document.querySelector('#road'));
 
   document.querySelector('.score').classList.remove('hide');
-
+ 
+  document.addEventListener('keydown',spaceStop) ;
   window.requestAnimationFrame(Play);
  
 }
