@@ -8,9 +8,10 @@
 // It is Game Object :
 let  Game  = {      
 Car:{Speed:5,X:0,Y:0},
-Play:true,
+Play:false,
 Stop:false,
 Score:0,
+GameOver:false,
 Keys:{ArrowLeft:false,ArrowRight:false,ArrowUp:false,ArrowDown:false,Space:{Toggle:true}},
 }
 
@@ -68,7 +69,7 @@ let Down = (Element) =>{
 // This If condition will check whether press keys is space key or not :
 //if Press keys is space key then it will  select message object & make it appear of screen with  message :        
   
-if(Element.key === " " && Game.Keys.Space.Toggle){
+if( (Element.key === " " && Game.Keys.Space.Toggle) && Game.Play && !Game.GameOver){
         //It will select message Object & store reference in messageBox :
      let messageBox = document.querySelector('.message');
        
@@ -145,6 +146,8 @@ let isCarCollide = (enemyCar,car) => {
       return false;
     else
       return true;
+
+
 }
 
 // It is moveEnemyCar function :It is resposible for movements of enemy Cars :
@@ -176,7 +179,7 @@ let moveEnemyCar = (playerCar) => {
       
         // It   deactivates the game :
         Game.Play = false;
-
+        Game.GameOver = true ;
        //printMessage will call ,having 3 object arguments 
        // 1st is message object:
        //2nd one is start object:
@@ -206,7 +209,7 @@ let createEnemyCar = (Position) => {
       
         // It create a div element object in DOM(Document Object Modal) & store to enemyCar variable : 
              let enemyCar  = document.createElement('div');
-    
+                
         // It  sets a attribute to enemyCar object :
              enemyCar.setAttribute('class','cars');
     
@@ -260,9 +263,11 @@ let carMove = (car, Arrowkeys) =>{
   
 }
 
+//It is Create car function :
 let createCar = (position) => {
       
      let carDiv  =  document.createElement('div');
+                    
      carDiv.setAttribute('class','car');
      carDiv.setAttribute('id','car');
      carDiv.style.top = `${320}px`; 
@@ -281,7 +286,7 @@ let moveLines = () => {
         
     let TOP =  line.offsetTop ;
      
-     if(TOP > 600 )
+     if(TOP > 590 )
        TOP -= 660 ;
      
      TOP += Game.Car.Speed ;
@@ -342,7 +347,8 @@ let spaceStop = (Element) => {
 // It is Start Function :
 let START = (Element) => {
 
-
+   Game.Play = true ;
+   Game.GameOver = false ;
    resetGame(Game,document.querySelector('#road'));
 
   document.querySelector('#start').classList.add('hide'); // It will hide start message from screen :
