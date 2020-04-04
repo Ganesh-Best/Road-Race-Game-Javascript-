@@ -141,7 +141,7 @@ let isCarCollide = (enemyCar,car) => {
   let bRect =  car.getBoundingClientRect();
    
 
-  // It will detect collision : ->You have to search collision in and you will understand it :
+  // It will detect collision : ->You have to search collision detection on google  and you will understand it :
     if( ( ( (aRect.top + aRect.height ) < ( bRect.top ) ) || ( aRect.top > ( bRect.top + bRect.height ) ) || ( ( aRect.left + aRect.width ) < bRect.left ) || ( aRect.left > (bRect.left + bRect.width)) ))
       return false;
     else
@@ -267,7 +267,7 @@ let carMove = (car, Arrowkeys) =>{
 let createCar = (position) => {
       
      let carDiv  =  document.createElement('div');
-                    
+     carDiv.innerHTML = `<img src ='Assets/car.png' >` ;               
      carDiv.setAttribute('class','car');
      carDiv.setAttribute('id','car');
      carDiv.style.top = `${320}px`; 
