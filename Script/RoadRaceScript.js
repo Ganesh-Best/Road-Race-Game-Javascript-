@@ -14,6 +14,8 @@ Score:0,
 GameOver:false,
 Keys:{ArrowLeft:false,ArrowRight:false,ArrowUp:false,ArrowDown:false,Space:{Toggle:true}},
 }
+    
+    const race =  new Audio('Assets/race.mp3');
 
 //It is reset Game function,it receiving 2 parameter ,first one Game Object,2nd road object(It means div element having id or class value : road) :
 let resetGame = (Game ,road) => {
@@ -56,6 +58,10 @@ let printMessage = (position,start,score) => {
    score.classList.add('hide');
 
 }
+
+let irregular = (k = 0) => {
+  return   (Math.ceil(Math.random() * 4) + k ) ;
+  }
 
 
 // It is down function: 
@@ -205,22 +211,23 @@ let randomleft = () =>{
 let createEnemyCar = (Position) => {
    
    // It is loop ,it executes all code 4 times : 
-   for(let i = 0 ; i < 4 ; i++){
+   for(let i = 0 ; i < 3 ; i++){
       
         // It create a div element object in DOM(Document Object Modal) & store to enemyCar variable : 
              let enemyCar  = document.createElement('div');
                 
+             enemyCar.innerHTML =  `<img src ='Assets/${irregular(4)}.png' >`;
         // It  sets a attribute to enemyCar object :
              enemyCar.setAttribute('class','cars');
     
         //It  sets left position of enemyCar object: 
-             enemyCar.style.left = `${randomleft() + 80 }px`;
+             enemyCar.style.left = `${randomleft() + 60 }px`;
         
         //It  sets top position of enemyCar object: 
-             enemyCar.style.top  = `${i * 150 }px`;
+             enemyCar.style.top  = `${i * 190 }px`;
 
         //It  sets backgroundColor of enemyCar object: 
-             enemyCar.style.backgroundColor = "blue" ;
+            
         
         // It add enemyCar object to road object(Div element having class or id value :road):      
              Position.appendChild(enemyCar);
@@ -263,11 +270,12 @@ let carMove = (car, Arrowkeys) =>{
   
 }
 
+
 //It is Create car function :
 let createCar = (position) => {
       
      let carDiv  =  document.createElement('div');
-     carDiv.innerHTML = `<img src ='Assets/car.png' >` ;               
+     carDiv.innerHTML = `<img src ='Assets/${irregular()}.png' >` ;               
      carDiv.setAttribute('class','car');
      carDiv.setAttribute('id','car');
      carDiv.style.top = `${320}px`; 
@@ -312,7 +320,7 @@ let Play = () => {
         
         
        carMove(document.querySelector('#car'),Game.Keys);
-       spaceStop(Game.Keys);
+       
        moveLines();
        moveEnemyCar(document.querySelector('#car'));
        Game.Score++ ;
@@ -339,10 +347,6 @@ let createLine = (Position) => {
      
 }
 
-let spaceStop = (Element) => {
-   
-  
-}
 
 // It is Start Function :
 let START = (Element) => {
@@ -363,7 +367,7 @@ let START = (Element) => {
 
   document.querySelector('.score').classList.remove('hide');
  
-  document.addEventListener('keydown',spaceStop) ;
+  
   window.requestAnimationFrame(Play);
  
 }

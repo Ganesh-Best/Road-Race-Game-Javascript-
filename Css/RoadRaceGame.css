@@ -42,10 +42,10 @@ body{
    top:70%;
    left:50%;
    transform:translate(-50%,-50%) ;
-   -webkit-transform:;
-   -moz-transform:;
-   -ms-transform:;
-   -o-transform:;
+   -webkit-transform:translate(-50%,-50%) ;
+   -moz-transform:translate(-50%,-50%) ;
+   -ms-transform:translate(-50%,-50%) ;
+   -o-transform:translate(-50%,-50%) ;
    background-color:#FFC312;
    padding:30px;
    padding-left:80px;
@@ -61,27 +61,27 @@ body{
   position:relative;  
   width:450px;
   height:100vh;
-  background-color:white;
+  background-color:black;
   margin:auto;
-  border-left:9px dashed black;
-  border-right:9px dashed black;  
+  border-left:9px dashed white;
+  border-right:9px dashed white;  
 
 }
 .car , .cars{
-   width: 50px;
+   width: 70px;
    height:90px;
    background-color:black;
    position: absolute;
    z-index:2; 
 }
 .cars{
-    height:50px;
+    height:70px;
 }
 .lines{
     position: absolute;
     width:10px;
     height:50px;
-    background-color:black;
+    background-color:white;
 }
 .score{
   position:absolute;
