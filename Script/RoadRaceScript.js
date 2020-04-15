@@ -14,9 +14,19 @@ Score:0,
 GameOver:false,
 Keys:{ArrowLeft:false,ArrowRight:false,ArrowUp:false,ArrowDown:false,Space:{Toggle:true}},
 }
-    
-    const race =  new Audio('Assets/race.mp3');
 
+//It is isCompatible function it will check  whether screen size compatible with game or not :
+const isCompatible  = () =>{
+  
+  //window is global object,innerWidth & innerHeight  check width & height  in which html document render : 
+    if(window.innerWidth >= 1280 && window.innerHeight >=647)
+       return true ;
+    else
+      return false ;   
+    
+
+}
+  
 //It is reset Game function,it receiving 2 parameter ,first one Game Object,2nd road object(It means div element having id or class value : road) :
 let resetGame = (Game ,road) => {
 
@@ -147,8 +157,10 @@ let isCarCollide = (enemyCar,car) => {
   let bRect =  car.getBoundingClientRect();
    
 
-  // It will detect collision : ->You have to search collision detection on google  and you will understand it :
-    if( ( ( (aRect.top + aRect.height ) < ( bRect.top ) ) || ( aRect.top > ( bRect.top + bRect.height ) ) || ( ( aRect.left + aRect.width ) < bRect.left ) || ( aRect.left > (bRect.left + bRect.width)) ))
+  // It will detect collision : ->You have to search collision detection on google  and you will understand  better  :
+    if( ( ( (aRect.top + aRect.height ) < ( bRect.top ) ) ||
+     ( aRect.top > ( bRect.top + bRect.height ) ) || ( ( aRect.left + aRect.width ) < bRect.left ) ||
+      ( aRect.left > (bRect.left + bRect.width)) ))
       return false;
     else
       return true;
@@ -372,6 +384,16 @@ let START = (Element) => {
  
 }
 
+
+if(!isCompatible()){
+      
+    document.querySelector('.message').classList.add('hide');
+      let start = document.querySelector('.start') ; 
+       start.innerText = ` Oops ! Your device not compatible :(`;
+       start.style.top = `50%`;
+}
+else{
+
 // It is Event Handling on Start Div,when user click to  Start div(message)(Having id = start) then START function will  Run(Executed) :
 document.querySelector('#start').addEventListener('click',START);
 
@@ -382,3 +404,4 @@ document.addEventListener('keydown',Down);
 // It is Event Handling on keys,when user release  key after press, Up function will Run(Execute):
 document.addEventListener('keyup',Up);
 
+}
