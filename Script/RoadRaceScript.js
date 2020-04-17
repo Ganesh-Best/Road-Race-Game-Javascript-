@@ -19,7 +19,7 @@ let Game = {
 const isCompatible = () => {
 
   //window is global object,innerWidth & innerHeight  check width & height  in which html document render : 
-  if (window.innerWidth >= 1280 )
+  if (window.innerWidth >= 1280)
     return true;
   else
     return false;
@@ -69,6 +69,8 @@ let printMessage = (position, start, score) => {
 
 }
 
+// It is irregular function(It return random number according to argument), 
+//taking one argument & set default value :0
 let irregular = (k = 0) => {
   return (Math.ceil(Math.random() * 4) + k);
 }
@@ -181,7 +183,7 @@ let moveEnemyCar = (playerCar) => {
     let TOP = car.offsetTop;
 
     // It check if top > 560 ,then it subtract 630 in TOP 
-    if (TOP > (window.innerHeight - 75) )
+    if (TOP > (window.innerHeight - 75))
       TOP -= 630;
 
     //It increases TOP value by Game.car.speed value(5); 
@@ -228,6 +230,7 @@ let createEnemyCar = (Position) => {
     // It create a div element object in DOM(Document Object Modal) & store to enemyCar variable : 
     let enemyCar = document.createElement('div');
 
+    //It create Image tag & set image link inside Div object(element): 
     enemyCar.innerHTML = `<img src ='Assets/${irregular(4)}.png' >`;
     // It  sets a attribute to enemyCar object :
     enemyCar.setAttribute('class', 'cars');
@@ -258,7 +261,7 @@ let carMove = (car, Arrowkeys) => {
 
   // this if conditon check if ArrowDown key activate(true) or not 
   // if it is activate then it will increase Top position of car by car Speed(5):    
-  if (Arrowkeys.ArrowDown && Game.Car.Y < window.innerHeight - 95 ) {
+  if (Arrowkeys.ArrowDown && Game.Car.Y < window.innerHeight - 95) {
     Game.Car.Y += Game.Car.Speed;
   }
 
@@ -283,61 +286,92 @@ let carMove = (car, Arrowkeys) => {
 }
 
 
-//It is Create car function :
+//It is Create car function ,it is taking one argument as position,
+//This function   create car  inside road object(element having either id or class value :road) :
 let createCar = (position) => {
 
+  // It creates div element object and store to carDiv object :
   let carDiv = document.createElement('div');
+
+  // It creates image tag & set random  image according to irregular function inside carDiv object :   
   carDiv.innerHTML = `<img src ='Assets/${irregular()}.png' >`;
+
+  //It sets class attribute to carDiv object : 
   carDiv.setAttribute('class', 'car');
+
+  //It sets id attribute to carDiv object :
   carDiv.setAttribute('id', 'car');
+
+  //It sets Top position  to carDiv object :
   carDiv.style.top = `${320}px`;
+
+  //It append carDiv object to Position object(road Object) :
   position.appendChild(carDiv);
 
+  //It taking left offset value of car and store to Game object :  
   Game.Car.X = carDiv.offsetLeft;
+
+  //It taking top offset value of car and store to Game object :   
   Game.Car.Y = carDiv.offsetTop;
-  console.log(Game.Car);
+
 }
 
+
+
+// This is movelines function :IT is responsible to move line:
 let moveLines = () => {
 
+  // It select all lines object and store to line array object :
   let lines = document.querySelectorAll('.lines');
 
+  // It iterates lines array using forEach method : 
   lines.forEach(function (line, index, lines) {
 
+    // It stores top position of  line object in TOP variable :
     let TOP = line.offsetTop;
 
-    if (TOP > (window.innerHeight - 65))
+    // It checks innerHeight of browser:
+    //If it is greater than innerHeight - 65 :    
+    if (TOP > (window.innerHeight - 65)) {
+
+      //Then It substracts 660 value in TOP variable: 
       TOP -= 660;
-
+    }
+    // It increate Top variable value by Speed which define inside Game object :    
     TOP += Game.Car.Speed;
-
+    // It sets top positon of line:
     line.style.top = `${TOP}px`;
 
   });
 
 }
 
+//It is updates Score function:responsible to update score in frontEnd :    
 let updateScore = () => {
-
+  //It updates score value to score object :
   document.querySelector('.score').textContent = `Score : ${Game.Score - 1}`;
 }
 
-let faster = (Game) => {
 
-}
-
+// It is play function : execute when window.requestAnimationFrame function call :
 let Play = () => {
 
+  //It execute all if -block code if game.play is activate(true); 
   if (Game.Play) {
 
-
+    //  calling move car function and passing to argument:
+    //1st one is car object,
+    //2nd one is Game keys object :
     carMove(document.querySelector('#car'), Game.Keys);
-
+    //Calling movelines function :
     moveLines();
+    //calling move enemyCar function & passing one argument: car  object array ;     
     moveEnemyCar(document.querySelector('#car'));
+    // it is updating game score : 
     Game.Score++;
+    //calling update Score function:  
     updateScore();
-    faster(Game);
+    //Calling window.requestAnimationFrame function ,to achieve recursion    
     window.requestAnimationFrame(Play);
 
   }
@@ -348,13 +382,19 @@ let Play = () => {
 // It will create lines : 
 let createLine = (Position) => {
 
+  //It creates 9 lines div object :  
   for (i = 0; i < 9; i++) {
 
+    // It creates div element object and store to line object :
     let line = document.createElement('div');
+
+    //It sets class with value lines to line object :  
     line.setAttribute('class', 'lines');
-    console.log(Position);
+    //It sets left position to line object :
     line.style.left = `${220}px`;
+    //It sets top position to line object:  
     line.style.top = `${i * 74}px`;
+    //It append line object to postion object (road object) :  
     Position.appendChild(line);
 
   }
@@ -364,34 +404,34 @@ let createLine = (Position) => {
 
 // It is Start Function :
 let START = (Element) => {
- 
- // It activat player : 
+
+  // It activat player : 
   Game.Play = true;
- //It deactivate gameover variable : 
+  //It deactivate gameover variable : 
   Game.GameOver = false;
- //It is resetGame function :It is taking to argument :1st one is game object and 2nd one is road object:
+  //It is resetGame function :It is taking to argument :1st one is game object and 2nd one is road object:
 
   resetGame(Game, document.querySelector('#road'));
 
-//It select Start object and add hide class on it :
+  //It select Start object and add hide class on it :
   document.querySelector('#start').classList.add('hide'); // It will hide start message from screen :
 
-// It select message object and add hide class on it : 
+  // It select message object and add hide class on it : 
   document.querySelector('#message').classList.add('hide');// It will hide message from screen :
 
-//Calling createCar function : and passing road object :
+  //Calling createCar function : and passing road object :
   createCar(document.querySelector('#road'));
 
-//Calling CreateLine function : and passing road object: 
+  //Calling CreateLine function : and passing road object: 
   createLine(document.querySelector('#road'));
 
-//Calling enemyCar function and passing road Object :  
+  //Calling enemyCar function and passing road Object :  
   createEnemyCar(document.querySelector('#road'));
 
- // selecting score object and adding removing hide class : 
+  // selecting score object and adding removing hide class : 
   document.querySelector('.score').classList.remove('hide');
 
-// Calling requestAnimationFrame function and passing Play function :
+  // Calling requestAnimationFrame function and passing Play function :
   window.requestAnimationFrame(Play);
 
 }
@@ -400,7 +440,7 @@ let START = (Element) => {
 //,otherwise it return false: & execute else block code : 
 
 if (!isCompatible()) {
- 
+
   // It will add hide class to to message object :[object(element) having class or id value :message]
   document.querySelector('.message').classList.add('hide');
   //It select  start object & store  in start variable:  
@@ -409,7 +449,7 @@ if (!isCompatible()) {
   start.innerText = ` Oops ! Your device not compatible :(`;
   //It change top-position of start object :  
   start.style.top = `50%`;
-  
+
 }
 else {
 
